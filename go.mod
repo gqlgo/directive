@@ -1,4 +1,4 @@
-module github.com/gqlgo/iddirective
+module github.com/gqlgo/directive
 
 go 1.19
 

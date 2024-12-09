@@ -1,4 +1,4 @@
-package iddirective
+package directive
 
 import (
 	"github.com/gqlgo/gqlanalysis"
@@ -7,8 +7,8 @@ import (
 
 func Analyzer() *gqlanalysis.Analyzer {
 	return &gqlanalysis.Analyzer{
-		Name: "iddirective",
-		Doc:  "iddirective finds id fields with no id directive.",
+		Name: "directive",
+		Doc:  "directive finds id fields with no id directive.",
 		Run:  run,
 	}
 }

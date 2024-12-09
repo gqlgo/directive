@@ -1,13 +1,13 @@
-package iddirective_test
+package directive_test
 
 import (
 	"testing"
 
+	"github.com/gqlgo/directive"
 	"github.com/gqlgo/gqlanalysis/analysistest"
-	"github.com/gqlgo/iddirective"
 )
 
 func Test(t *testing.T) {
 	testdata := analysistest.TestData(t)
-	analysistest.Run(t, testdata, iddirective.Analyzer(), "a")
+	analysistest.Run(t, testdata, directive.Analyzer(), "a")
 }

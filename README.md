@@ -1,8 +1,8 @@
-# iddirective
+# directive
 
 [![pkg.go.dev][gopkg-badge]][gopkg]
 
-`iddirective` finds id fields with no @id directive and arguments in your GraphQL schema files.
+`directive` finds id fields with no @id directive and arguments in your GraphQL schema files.
 
 ```graphql
 input NoIdDirectiveMutationInput {
@@ -21,27 +21,27 @@ package main
 
 import (
 	"flag"
-	"github.com/gqlgo/iddirective"
+	"github.com/gqlgo/directive"
 	"github.com/gqlgo/gqlanalysis/multichecker"
 )
 
 func main() {
 	multichecker.Main(
-		iddirective.Analyzer(),
+		directive.Analyzer(),
 	)
 }
 ```
 
-`iddirective` provides a typical main function and you can install with `go install` command.
+`directive` provides a typical main function and you can install with `go install` command.
 
 ```sh
-$ go install github.com/gqlgo/iddirective/cmd/iddirective@latest
+$ go install github.com/gqlgo/directive/cmd/directive@latest
 ```
 
-The `iddirective` command has a flag, `schema` which will be parsed and analyzed by iddirective's Analyzer.
+The `directive` command has a flag, `schema` which will be parsed and analyzed by directive's Analyzer.
 
 ```sh
-$ iddirective -schema="server/graphql/schema/**/*.graphql"
+$ directive -schema="server/graphql/schema/**/*.graphql"
 ```
 
 The default value of `schema` is "schema/*/**.graphql".
@@ -51,5 +51,5 @@ The default value of `schema` is "schema/*/**.graphql".
 [![Appify Technologies, Inc.](appify-logo.png)](http://github.com/appify-technologies)
 
 <!-- links -->
-[gopkg]: https://pkg.go.dev/github.com/gqlgo/iddirective
-[gopkg-badge]: https://pkg.go.dev/badge/github.com/gqlgo/iddirective?status.svg
+[gopkg]: https://pkg.go.dev/github.com/gqlgo/directive
+[gopkg-badge]: https://pkg.go.dev/badge/github.com/gqlgo/directive?status.svg
