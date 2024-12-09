@@ -2,55 +2,54 @@ package directive
 
 import (
 	"github.com/gqlgo/gqlanalysis"
-	"github.com/vektah/gqlparser/v2/ast"
 )
 
-func Analyzer() *gqlanalysis.Analyzer {
+func InputObjectFieldAnalyzer(config *InputObjectFieldConfig) *gqlanalysis.Analyzer {
 	return &gqlanalysis.Analyzer{
 		Name: "directive",
-		Doc:  "directive finds id fields with no id directive.",
-		Run:  run,
+		Doc:  "detect missing directives.",
+		Run:  inputObjectFieldLinter(config),
 	}
 }
 
-func isIDType(t *ast.Type) bool {
-	if t == nil {
-		return false
-	}
-	if t.NamedType == "ID" {
-		return true
-	}
-	return isIDType(t.Elem)
-}
-
-func run(pass *gqlanalysis.Pass) (interface{}, error) {
-	for _, t := range pass.Schema.Types {
-		if t.BuiltIn {
-			continue
+// inputObjectFieldLinter detects missing directives for input object field.
+func inputObjectFieldLinter(config *InputObjectFieldConfig) func(pass *gqlanalysis.Pass) (interface{}, error) {
+	return func(pass *gqlanalysis.Pass) (interface{}, error) {
+		types := targetTypes(pass.Schema.Types, config.Kind)
+		for _, t := range types {
+			fields := targetFieldType(t.Fields, config.FieldType)
+			for _, field := range fields {
+				if !findDirectiveOnField(field, config.Directive) {
+					pass.Reportf(field.Position, config.ReportFormat, t.Name, field.Name)
+				}
+			}
 		}
-		if t.Kind == ast.InputObject {
+		return nil, nil
+	}
+}
+
+func ObjectFieldArgumentAnalyzer(config *ObjectFieldArgumentConfig) *gqlanalysis.Analyzer {
+	return &gqlanalysis.Analyzer{
+		Name: "directive",
+		Doc:  "detect missing directives.",
+		Run:  objectFieldArgumentAnalyzer(config),
+	}
+}
+
+// inputObjectFieldLinter detects missing directives for input object field.
+func objectFieldArgumentAnalyzer(config *ObjectFieldArgumentConfig) func(pass *gqlanalysis.Pass) (interface{}, error) {
+	return func(pass *gqlanalysis.Pass) (interface{}, error) {
+		types := targetTypes(pass.Schema.Types, config.Kind)
+		for _, t := range types {
 			for _, field := range t.Fields {
-				if field != nil && field.Type != nil {
-					if isIDType(field.Type) {
-						if field.Directives.ForName("id") == nil {
-							pass.Reportf(field.Position, "%s has no id directive", field.Name)
-						}
+				args := targetFieldArgumentType(field, config.FieldArgumentType)
+				for _, arg := range args {
+					if !findDirectiveOnArg(arg, config.Directive) {
+						pass.Reportf(field.Position, config.ReportFormat, arg.Name, field.Name)
 					}
 				}
 			}
 		}
-		if t.Kind == ast.Object {
-			for _, field := range t.Fields {
-				for _, arg := range field.Arguments {
-					if isIDType(arg.Type) {
-						if arg.Directives.ForName("id") == nil {
-							pass.Reportf(field.Position, "argument %s of %s has no id directive", arg.Name, field.Name)
-						}
-					}
-				}
-			}
-		}
+		return nil, nil
 	}
-
-	return nil, nil
 }

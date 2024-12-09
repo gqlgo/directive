@@ -46,10 +46,6 @@ $ directive -schema="server/graphql/schema/**/*.graphql"
 
 The default value of `schema` is "schema/*/**.graphql".
 
-## Author
-
-[![Appify Technologies, Inc.](appify-logo.png)](http://github.com/appify-technologies)
-
 <!-- links -->
 [gopkg]: https://pkg.go.dev/github.com/gqlgo/directive
 [gopkg-badge]: https://pkg.go.dev/badge/github.com/gqlgo/directive?status.svg

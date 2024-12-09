@@ -1,0 +1,7 @@
+---
+object_field_argument:
+  - description: "fieldの引数にid directiveが存在することをチェックする"
+    directive: id
+    kind: OBJECT
+    field_argument_type: ID
+    report_format: "argument %s of %s has no id directive"

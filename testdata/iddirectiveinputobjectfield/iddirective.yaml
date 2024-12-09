@@ -1,0 +1,7 @@
+---
+input_object_field:
+  - description: "inputのフィールドにid directiveが存在することをチェックする"
+    directive: id
+    kind: INPUT_OBJECT
+    field_type: ID
+    report_format: "%s.%s has no id directive"
