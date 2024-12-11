@@ -1,0 +1,22 @@
+type IntType {
+    i: Int!
+    intWithConstraintDirective(arg: Int! @constraint): Int!
+    intWithNoConstraintDirective(arg: Int!): Int!  # want "argument arg of intWithNoConstraintDirective has no constraint directive"
+    intWithDirective(args: [Int!]! @constraint): Int!
+    intWithNoDirective(args: [Int!]!): Int!  # want "argument args of intWithNoDirective has no constraint directive"
+}
+
+extend type Mutation {
+    intMutation(input: IntMutationInput!): Int!
+    intNoConstraintDirectiveMutation(intNoConstraintDirectiveMutationInput: IntNoConstraintDirectiveMutationInput): Int!
+}
+
+input IntMutationInput {
+    field: Int! @constraint
+    fields: [Int!]! @constraint
+}
+
+input IntNoConstraintDirectiveMutationInput {
+    field: Int! # want "field has no constraint directive"
+    fields: [Int!]! # want "fields has no constraint directive"
+}

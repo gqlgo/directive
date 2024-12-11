@@ -1,6 +1,7 @@
 package directive_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -8,30 +9,19 @@ import (
 	"github.com/gqlgo/gqlanalysis/analysistest"
 )
 
-func TestInputObjectField(t *testing.T) {
-	testdata := analysistest.TestData(t)
-	iddirectiveConfigFile := "./testdata/iddirectiveinputobjectfield/iddirective.yaml"
-	configFile, err := os.Open(iddirectiveConfigFile)
-	if err != nil {
-		t.Fatalf("failed to open config file: %v", err)
+func TestDirective(t *testing.T) {
+	targets := []string{"constraint", "id", "list", "permission"}
+	for _, target := range targets {
+		testdata := analysistest.TestData(t)
+		configFilePath := fmt.Sprintf("./testdata/%s/directive.yaml", target)
+		configFile, err := os.Open(configFilePath)
+		if err != nil {
+			t.Fatalf("failed to open config file: %v", err)
+		}
+		config, err := directive.ParseConfigFile(configFile)
+		if err != nil {
+			t.Fatalf("failed to parse config file: %v", err)
+		}
+		analysistest.Run(t, testdata, directive.NewAnalyzers(config)[0], target)
 	}
-	config, err := directive.ParseConfigFile(configFile)
-	if err != nil {
-		t.Fatalf("failed to parse config file: %v", err)
-	}
-	analysistest.Run(t, testdata, directive.InputObjectFieldAnalyzer(config.InputObjectFieldConfig[0]), "iddirectiveinputobjectfield")
-}
-
-func TestObjectFieldArgument(t *testing.T) {
-	testdata := analysistest.TestData(t)
-	iddirectiveConfigFile := "./testdata/iddirectiveobjectfieldargument/iddirective.yaml"
-	configFile, err := os.Open(iddirectiveConfigFile)
-	if err != nil {
-		t.Fatalf("failed to open config file: %v", err)
-	}
-	config, err := directive.ParseConfigFile(configFile)
-	if err != nil {
-		t.Fatalf("failed to parse config file: %v", err)
-	}
-	analysistest.Run(t, testdata, directive.ObjectFieldArgumentAnalyzer(config.ObjectFieldArgumentConfig[0]), "iddirectiveobjectfieldargument")
 }

@@ -1,0 +1,23 @@
+type StringType {
+    s: String!
+    stringWithConstraintDirective(arg: String! @constraint, first: String!): String!
+    stringWithNoConstraintDirective(arg: String!): String!  # want "argument arg of stringWithNoConstraintDirective has no constraint directive"
+    stringWithDirective(args: [String!]! @constraint): String!
+    stringWithNoDirective(args: [String!]!): String!  # want "argument args of stringWithNoDirective has no constraint directive"
+}
+
+type Mutation {
+    stringMutation(input: StringMutationInput!): String!
+    stringNoConstraintDirectiveMutation(stringNoConstraintDirectiveMutationInput: StringNoConstraintDirectiveMutationInput): String!
+}
+
+input StringMutationInput {
+    first: String!
+    field: String! @constraint
+    fields: [String!]! @constraint
+}
+
+input StringNoConstraintDirectiveMutationInput {
+    field: String! # want "field has no constraint directive"
+    fields: [String!]! # want "fields has no constraint directive"
+}

@@ -8,28 +8,42 @@ import (
 )
 
 type Config struct {
+	Analyzer []*AnalyzerConfig `yaml:"analyzer"`
+}
+
+type AnalyzerConfig struct {
+	AnalyzerName              string                       `yaml:"analyzer_name"`
+	Description               string                       `yaml:"description"`
 	InputObjectFieldConfig    []*InputObjectFieldConfig    `yaml:"input_object_field"`
 	ObjectFieldArgumentConfig []*ObjectFieldArgumentConfig `yaml:"object_field_argument"`
+	TypeConfig                []*TypeConfig                `yaml:"type"`
 }
 
 type InputObjectFieldConfig struct {
 	Description string `yaml:"description"`
 	Directive   string `yaml:"directive"`
-	// Kinds is a list of definition kinds to check.
-	Kind ast.DefinitionKind `yaml:"kind"`
-	// FieldType is the name of the field to check.
-	FieldType    string `yaml:"field_type"`
-	ReportFormat string `yaml:"report_format"`
+	// FieldTypePatterns is the name of the field to check.
+	FieldTypePatterns       []string `yaml:"field_type"`
+	IgnoreFieldNamePatterns []string `yaml:"ignore_field_name"`
+	ReportFormat            string   `yaml:"report_format"`
 }
 
 type ObjectFieldArgumentConfig struct {
 	Description string `yaml:"description"`
 	Directive   string `yaml:"directive"`
-	// Kinds is a list of definition kinds to check.
-	Kind ast.DefinitionKind `yaml:"kind"`
-	// FieldArgumentType is the name of the field argument to check.
-	FieldArgumentType string `yaml:"field_argument_type"`
-	ReportFormat      string `yaml:"report_format"`
+	// ArgumentTypePatterns is the name of the field argument to check.
+	ArgumentTypePatterns       []string `yaml:"argument_type"`
+	IgnoreArgumentNamePatterns []string `yaml:"ignore_argument_name"`
+	ReportFormat               string   `yaml:"report_format"`
+}
+
+type TypeConfig struct {
+	Description        string               `yaml:"description"`
+	Directive          string               `yaml:"directive"`
+	Kinds              []ast.DefinitionKind `yaml:"kind"`
+	ObjectPatterns     []string             `yaml:"object_patterns"`
+	IgnoreTypePatterns []string             `yaml:"ignore_type"`
+	ReportFormat       string               `yaml:"report_format"`
 }
 
 func ParseConfigFile(configFile io.Reader) (*Config, error) {

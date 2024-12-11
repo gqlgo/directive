@@ -1,0 +1,11 @@
+---
+analyzer:
+  - analyzer_name: "permission directive"
+    description: "permission directive exists on the type"
+    type:
+      - description: "permission directive exists on the type"
+        directive: permission
+        kind: ['OBJECT', 'INTERFACE', 'FIELD_DEFINITION']
+        object_patterns: ['.*']
+        ignore_type: [ 'Query', 'Mutation', 'Subscription', 'PageInfo', 'Connection', 'Payload']
+        report_format: "%s has no permission directive"

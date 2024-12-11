@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gqlgo/directive"
-	"github.com/gqlgo/gqlanalysis"
 	"github.com/gqlgo/gqlanalysis/multichecker"
 	"log"
 	"os"
@@ -28,15 +27,7 @@ func main() {
 		log.Fatalf("failed to parse config: %v", err)
 	}
 
-	var analyzers []*gqlanalysis.Analyzer
-	for _, c := range config.InputObjectFieldConfig {
-		analyzer := directive.InputObjectFieldAnalyzer(c)
-		analyzers = append(analyzers, analyzer)
-	}
-	for _, c := range config.ObjectFieldArgumentConfig {
-		analyzer := directive.ObjectFieldArgumentAnalyzer(c)
-		analyzers = append(analyzers, analyzer)
-	}
+	analyzers := directive.NewAnalyzers(config)
 
 	multichecker.Main(analyzers...)
 }

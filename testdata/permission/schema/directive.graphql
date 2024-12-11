@@ -1,0 +1,4 @@
+scalar Permission
+
+directive @permission(permissions: [Permission!]) on OBJECT | INTERFACE | FIELD_DEFINITION
+

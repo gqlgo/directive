@@ -1,0 +1,8 @@
+directive @constraint(
+    minLength: Int,
+    maxLength: Int,
+    pattern: String,
+    format: String,
+    min: String,
+    max: String,
+) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION

@@ -1,0 +1,1 @@
+directive @list(min: Int, max: Int) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION

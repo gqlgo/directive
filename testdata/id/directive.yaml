@@ -1,0 +1,14 @@
+---
+analyzer:
+  - analyzer_name: "id directive"
+    description: "id directive exists on the field"
+    input_object_field:
+      - description: "id directive exists on the input field"
+        directive: id
+        field_type: ['ID']
+        report_format: "%s.%s has no id directive"
+    object_field_argument:
+      - description: "id directive exists on the object field argument"
+        directive: id
+        argument_type: ['ID']
+        report_format: "argument %s of %s has no id directive"

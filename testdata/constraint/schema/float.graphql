@@ -1,0 +1,22 @@
+type FloatType {
+    f: Float!
+    floatWithConstraintDirective(arg: Float! @constraint): Float!
+    floatWithNoConstraintDirective(arg: Float!): Float!  # want "argument arg of floatWithNoConstraintDirective has no constraint directive"
+    floatWithDirective(args: [Float!]! @constraint): Float!
+    floatWithNoDirective(args: [Float!]!): Float!  # want "argument args of floatWithNoDirective has no constraint directive"
+}
+
+extend type Mutation {
+    floatMutation(input: FloatMutationInput!): Float!
+    floatNoConstraintDirectiveMutation(floatNoConstraintDirectiveMutationInput: FloatNoConstraintDirectiveMutationInput): Float!
+}
+
+input FloatMutationInput {
+    field: Float! @constraint
+    fields: [Float!]! @constraint
+}
+
+input FloatNoConstraintDirectiveMutationInput {
+    field: Float! # want "field has no constraint directive"
+    fields: [Float!]! # want "fields has no constraint directive"
+}

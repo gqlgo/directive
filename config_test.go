@@ -18,27 +18,120 @@ func TestParseConfigFile(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "TestParseConfigFile",
+			name: "constraint directive",
 			args: args{
-				configFile: "./testdata/iddirective/iddirective.yaml",
+				configFile: "./testdata/constraint/directive.yaml",
 			},
 			want: &Config{
-				InputObjectFieldConfig: []*InputObjectFieldConfig{
+				Analyzer: []*AnalyzerConfig{
 					{
-						Description:  "inputのフィールドにid directiveが存在することをチェックする",
-						Directive:    "id",
-						Kind:         ast.InputObject,
-						FieldType:    "ID",
-						ReportFormat: "%s.%s has no id directive",
+						AnalyzerName: "constraint directive",
+						Description:  "constraint directive exists on the field",
+						InputObjectFieldConfig: []*InputObjectFieldConfig{
+							{
+								Description:             "constraint directive exists on the input field",
+								Directive:               "constraint",
+								FieldTypePatterns:       []string{`^\[?Int\]?$`, `^\[?Float\]?$`, `^\[?String\]?$`, `^\[?Decimal\]?$`, `^\[?URL\]?$`},
+								IgnoreFieldNamePatterns: []string{`^first$`, `^last$`, `^after$`, `^before$`},
+								ReportFormat:            "%s.%s has no constraint directive",
+							},
+						},
+						ObjectFieldArgumentConfig: []*ObjectFieldArgumentConfig{
+							{
+								Description:                "constraint directive exists on the object field argument",
+								Directive:                  "constraint",
+								ArgumentTypePatterns:       []string{`^\[?Int\]?$`, `^\[?Float\]?$`, `^\[?String\]?$`, `^\[?Decimal\]?$`, `^\[?URL\]?$`},
+								IgnoreArgumentNamePatterns: []string{`^first$`, `^last$`, `^after$`, `^before$`},
+								ReportFormat:               "argument %s of %s has no constraint directive",
+							},
+						},
 					},
 				},
-				ObjectFieldArgumentConfig: []*ObjectFieldArgumentConfig{
+			},
+			wantErr: false,
+		},
+		{
+			name: "id directive",
+			args: args{
+				configFile: "./testdata/id/directive.yaml",
+			},
+			want: &Config{
+				Analyzer: []*AnalyzerConfig{
 					{
-						Description:       "fieldの引数にid directiveが存在することをチェックする",
-						Directive:         "id",
-						Kind:              ast.Object,
-						FieldArgumentType: "ID",
-						ReportFormat:      "argument %s of %s has no id directive",
+						AnalyzerName: "id directive",
+						Description:  "id directive exists on the field",
+						InputObjectFieldConfig: []*InputObjectFieldConfig{
+							{
+								Description:       "id directive exists on the input field",
+								Directive:         "id",
+								FieldTypePatterns: []string{"ID"},
+								ReportFormat:      "%s.%s has no id directive",
+							},
+						},
+						ObjectFieldArgumentConfig: []*ObjectFieldArgumentConfig{
+							{
+								Description:          "id directive exists on the object field argument",
+								Directive:            "id",
+								ArgumentTypePatterns: []string{"ID"},
+								ReportFormat:         "argument %s of %s has no id directive",
+							},
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "list directive",
+			args: args{
+				configFile: "./testdata/list/directive.yaml",
+			},
+			want: &Config{
+				Analyzer: []*AnalyzerConfig{
+					{
+						AnalyzerName: "list directive",
+						Description:  "list directive exists on the array field",
+						InputObjectFieldConfig: []*InputObjectFieldConfig{
+							{
+								Description:       "list directive exists on the input array field",
+								Directive:         "list",
+								FieldTypePatterns: []string{`\[.+\]`},
+								ReportFormat:      "%s.%s has no list directive",
+							},
+						},
+						ObjectFieldArgumentConfig: []*ObjectFieldArgumentConfig{
+							{
+								Description:          "list directive exists on the object field array argument",
+								Directive:            "list",
+								ArgumentTypePatterns: []string{`\[.+\]`},
+								ReportFormat:         "argument %s of %s has no list directive",
+							},
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "permission directive",
+			args: args{
+				configFile: "./testdata/permission/directive.yaml",
+			},
+			want: &Config{
+				Analyzer: []*AnalyzerConfig{
+					{
+						AnalyzerName: "permission directive",
+						Description:  "permission directive exists on the type",
+						TypeConfig: []*TypeConfig{
+							{
+								Description:        "permission directive exists on the type",
+								Directive:          "permission",
+								Kinds:              []ast.DefinitionKind{"OBJECT", "INTERFACE", "FIELD_DEFINITION"},
+								ObjectPatterns:     []string{".*"},
+								IgnoreTypePatterns: []string{"Query", "Mutation", "Subscription", "PageInfo", "Connection", "Payload"},
+								ReportFormat:       "%s has no permission directive",
+							},
+						},
 					},
 				},
 			},

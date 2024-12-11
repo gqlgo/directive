@@ -1,1 +1,0 @@
-directive @id(kind: String!) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION

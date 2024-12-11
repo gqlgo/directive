@@ -1,0 +1,19 @@
+type Object @permission(permissions: ["user:read"]){
+    id: ID!
+    field: String!
+}
+
+type ObjectWithoutPermission { # want "ObjectWithoutPermission has no permission directive"
+    id: ID!
+    field: String!
+}
+
+interface Interface @permission(permissions: ["user:read"]) {
+    id: ID!
+    field: String!
+}
+
+interface InterfaceWithoutPermission { # want "InterfaceWithoutPermission has no permission directive"
+    id: ID!
+    field: String!
+}

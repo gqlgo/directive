@@ -1,0 +1,22 @@
+type Mutation {
+    create(input: CreateInput!): CreatePayload! @permission(permissions: ["user:write"])
+    createWithoutPermission(input: CreateWithoutPermissionInput!): CreateWithoutPermissionPayload!
+}
+
+input CreateInput {
+    aIDs: [ID!]!
+    names: [String!]!
+}
+
+type CreatePayload {
+    a: [String!]!
+}
+
+input CreateWithoutPermissionInput {
+    bIDs: [ID!]!
+    names: [String!]!
+}
+
+type CreateWithoutPermissionPayload {
+    b: [String!]!
+}
