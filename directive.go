@@ -86,7 +86,7 @@ func objectFieldArgumentAnalyzer(config *ObjectFieldArgumentConfig) func(pass *g
 				excludedArgs := excludeTargetArgumentsByFieldName(args, config.IgnoreArgumentNamePatterns)
 				for _, arg := range excludedArgs {
 					if !findDirectiveOnArg(arg, config.Directive) {
-						pass.Reportf(field.Position, config.ReportFormat, arg.Name, field.Name)
+						pass.Reportf(arg.Position, config.ReportFormat, arg.Name, field.Name)
 					}
 				}
 			}
