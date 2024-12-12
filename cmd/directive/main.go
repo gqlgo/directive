@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/gqlgo/directive"
 	"github.com/gqlgo/gqlanalysis/multichecker"
 	"log"
@@ -13,8 +12,6 @@ func main() {
 	var configFilePath string
 	flag.StringVar(&configFilePath, "config", "", "directive config yaml file path")
 	flag.Parse()
-
-	fmt.Println("configFilePath: ", configFilePath)
 
 	configFile, err := os.Open(configFilePath)
 	if err != nil {
