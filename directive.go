@@ -61,7 +61,9 @@ func inputObjectFieldLinter(config *InputObjectFieldConfig) func(pass *gqlanalys
 			excludedFields := excludeTargetFieldTypeByTypeName(fields, config.IgnoreFieldNamePatterns)
 			for _, field := range excludedFields {
 				if !findDirectiveOnField(field, config.Directive) {
-					pass.Reportf(field.Position, config.ReportFormat, t.Name, field.Name)
+					if field.Position != nil {
+						pass.Reportf(field.Position, config.ReportFormat, t.Name, field.Name)
+					}
 				}
 			}
 		}
@@ -86,7 +88,9 @@ func objectFieldArgumentAnalyzer(config *ObjectFieldArgumentConfig) func(pass *g
 				excludedArgs := excludeTargetArgumentsByFieldName(args, config.IgnoreArgumentNamePatterns)
 				for _, arg := range excludedArgs {
 					if !findDirectiveOnArg(arg, config.Directive) {
-						pass.Reportf(arg.Position, config.ReportFormat, arg.Name, field.Name)
+						if arg.Position != nil {
+							pass.Reportf(arg.Position, config.ReportFormat, arg.Name, field.Name)
+						}
 					}
 				}
 			}
@@ -109,7 +113,9 @@ func typeAnalyzer(config *TypeConfig) func(pass *gqlanalysis.Pass) (any, error) 
 		excludedTypes := excludeTargetTypesByTypeName(types, config.IgnoreTypePatterns)
 		for _, t := range excludedTypes {
 			if !findDirectiveOnDefinition(t, config.Directive) {
-				pass.Reportf(t.Position, config.ReportFormat, t.Name)
+				if t.Position != nil {
+					pass.Reportf(t.Position, config.ReportFormat, t.Name)
+				}
 			}
 		}
 		return nil, nil
