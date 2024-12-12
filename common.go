@@ -7,10 +7,20 @@ import (
 	"slices"
 )
 
-func targetTypes(types map[string]*ast.Definition, kinds []ast.DefinitionKind) []*ast.Definition {
+func targetTypeKind(types map[string]*ast.Definition, kinds []ast.DefinitionKind) []*ast.Definition {
 	var targets []*ast.Definition
 	for _, t := range types {
 		if !t.BuiltIn && slices.Contains(kinds, t.Kind) {
+			targets = append(targets, t)
+		}
+	}
+	return targets
+}
+
+func targetTypes(types ast.DefinitionList, fieldParentTypePatterns []string) ast.DefinitionList {
+	var targets ast.DefinitionList
+	for _, t := range types {
+		if slices.ContainsFunc(fieldParentTypePatterns, func(pattern string) bool { return isNameMatch(pattern, t.Name) }) {
 			targets = append(targets, t)
 		}
 	}
@@ -53,20 +63,20 @@ func targetFieldArgumentType(field *ast.FieldDefinition, fieldArgumentTypePatter
 	return targets
 }
 
-func excludeTargetArgumentsByFieldName(args ast.ArgumentDefinitionList, ignoreFiledNamePatterns []string) ast.ArgumentDefinitionList {
+func excludeTargetArgumentsByField(args ast.ArgumentDefinitionList, ignoreArgumentPatterns []string) ast.ArgumentDefinitionList {
 	var targets ast.ArgumentDefinitionList
 	for _, arg := range args {
-		if !slices.ContainsFunc(ignoreFiledNamePatterns, func(pattern string) bool { return isNameMatch(pattern, arg.Name) }) {
+		if !slices.ContainsFunc(ignoreArgumentPatterns, func(pattern string) bool { return isNameMatch(pattern, arg.Name) }) {
 			targets = append(targets, arg)
 		}
 	}
 	return targets
 }
 
-func excludeTargetTypesByTypeName(types ast.DefinitionList, ignoreFiledNamePatterns []string) ast.DefinitionList {
+func excludeTargetTypesByTypeName(types ast.DefinitionList, ignoreTypePatterns []string) ast.DefinitionList {
 	var targets ast.DefinitionList
 	for _, t := range types {
-		if !slices.ContainsFunc(ignoreFiledNamePatterns, func(pattern string) bool { return isNameMatch(pattern, t.Name) }) {
+		if !slices.ContainsFunc(ignoreTypePatterns, func(pattern string) bool { return isNameMatch(pattern, t.Name) }) {
 			targets = append(targets, t)
 		}
 	}

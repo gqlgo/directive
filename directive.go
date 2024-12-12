@@ -2,7 +2,6 @@ package directive
 
 import (
 	"github.com/gqlgo/gqlanalysis"
-	"github.com/vektah/gqlparser/v2/ast"
 )
 
 func NewAnalyzers(config *Config) []*gqlanalysis.Analyzer {
@@ -23,12 +22,12 @@ func NewAnalyzer(analyzerConfig *AnalyzerConfig) *gqlanalysis.Analyzer {
 
 func MergeAnalyzers(analyzerConfig *AnalyzerConfig) func(pass *gqlanalysis.Pass) (any, error) {
 	var analyzers []*gqlanalysis.Analyzer
-	for _, c := range analyzerConfig.InputObjectFieldConfig {
-		analyzer := InputObjectFieldAnalyzer(c)
+	for _, c := range analyzerConfig.FieldConfig {
+		analyzer := FieldAnalyzer(c)
 		analyzers = append(analyzers, analyzer)
 	}
-	for _, c := range analyzerConfig.ObjectFieldArgumentConfig {
-		analyzer := ObjectFieldArgumentAnalyzer(c)
+	for _, c := range analyzerConfig.ArgumentConfig {
+		analyzer := ArgumentAnalyzer(c)
 		analyzers = append(analyzers, analyzer)
 	}
 	for _, c := range analyzerConfig.TypeConfig {
@@ -45,20 +44,21 @@ func MergeAnalyzers(analyzerConfig *AnalyzerConfig) func(pass *gqlanalysis.Pass)
 	}
 }
 
-func InputObjectFieldAnalyzer(config *InputObjectFieldConfig) *gqlanalysis.Analyzer {
+func FieldAnalyzer(config *FieldConfig) *gqlanalysis.Analyzer {
 	return &gqlanalysis.Analyzer{
 		Name: config.Directive,
 		Doc:  config.Description,
-		Run:  inputObjectFieldLinter(config),
+		Run:  FieldLinter(config),
 	}
 }
 
-func inputObjectFieldLinter(config *InputObjectFieldConfig) func(pass *gqlanalysis.Pass) (any, error) {
+func FieldLinter(config *FieldConfig) func(pass *gqlanalysis.Pass) (any, error) {
 	return func(pass *gqlanalysis.Pass) (any, error) {
-		types := targetTypes(pass.Schema.Types, []ast.DefinitionKind{ast.InputObject})
-		for _, t := range types {
+		types := targetTypeKind(pass.Schema.Types, config.Kinds)
+		types2 := targetTypes(types, config.FieldParentTypePatterns)
+		for _, t := range types2 {
 			fields := targetFieldType(t.Fields, config.FieldTypePatterns)
-			excludedFields := excludeTargetFieldTypeByTypeName(fields, config.IgnoreFieldNamePatterns)
+			excludedFields := excludeTargetFieldTypeByTypeName(fields, config.IgnoreFieldPatterns)
 			for _, field := range excludedFields {
 				if !findDirectiveOnField(field, config.Directive) {
 					if field.Position != nil {
@@ -71,21 +71,21 @@ func inputObjectFieldLinter(config *InputObjectFieldConfig) func(pass *gqlanalys
 	}
 }
 
-func ObjectFieldArgumentAnalyzer(config *ObjectFieldArgumentConfig) *gqlanalysis.Analyzer {
+func ArgumentAnalyzer(config *ArgumentConfig) *gqlanalysis.Analyzer {
 	return &gqlanalysis.Analyzer{
 		Name: config.Directive,
 		Doc:  config.Description,
-		Run:  objectFieldArgumentAnalyzer(config),
+		Run:  argumentAnalyzer(config),
 	}
 }
 
-func objectFieldArgumentAnalyzer(config *ObjectFieldArgumentConfig) func(pass *gqlanalysis.Pass) (any, error) {
+func argumentAnalyzer(config *ArgumentConfig) func(pass *gqlanalysis.Pass) (any, error) {
 	return func(pass *gqlanalysis.Pass) (any, error) {
-		types := targetTypes(pass.Schema.Types, []ast.DefinitionKind{ast.Object})
+		types := targetTypeKind(pass.Schema.Types, config.Kinds)
 		for _, t := range types {
 			for _, field := range t.Fields {
 				args := targetFieldArgumentType(field, config.ArgumentTypePatterns)
-				excludedArgs := excludeTargetArgumentsByFieldName(args, config.IgnoreArgumentNamePatterns)
+				excludedArgs := excludeTargetArgumentsByField(args, config.IgnoreArgumentPatterns)
 				for _, arg := range excludedArgs {
 					if !findDirectiveOnArg(arg, config.Directive) {
 						if arg.Position != nil {
@@ -109,7 +109,7 @@ func TypeAnalyzer(config *TypeConfig) *gqlanalysis.Analyzer {
 
 func typeAnalyzer(config *TypeConfig) func(pass *gqlanalysis.Pass) (any, error) {
 	return func(pass *gqlanalysis.Pass) (any, error) {
-		types := targetTypes(pass.Schema.Types, config.Kinds)
+		types := targetTypeKind(pass.Schema.Types, config.Kinds)
 		excludedTypes := excludeTargetTypesByTypeName(types, config.IgnoreTypePatterns)
 		for _, t := range excludedTypes {
 			if !findDirectiveOnDefinition(t, config.Directive) {

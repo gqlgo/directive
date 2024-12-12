@@ -28,18 +28,21 @@ The `directive` command has a flag, `config` which will be parsed and analyzed b
 analyzer:
   - analyzer_name: "constraint directive"
     description: "constraint directive exists on the field"
-    input_object_field:
+    field:
       - description: "constraint directive exists on the input field"
         directive: constraint
+        kind: ['INPUT_OBJECT']
         field_type: ['^\[?Int\]?$', '^\[?Float\]?$', '^\[?String\]?$', '^\[?Decimal\]?$', '^\[?URL\]?$']
-        ignore_field_name: ['^first$', '^last$', '^after$', '^before$']
+        ignore_field: ['^first$', '^last$', '^after$', '^before$']
         report_format: "%s.%s has no constraint directive"
-    object_field_argument:
+    argument:
       - description: "constraint directive exists on the object field argument"
         directive: constraint
+        kind: ['OBJECT']
         argument_type: ['^\[?Int\]?$', '^\[?Float\]?$', '^\[?String\]?$', '^\[?Decimal\]?$', '^\[?URL\]?$']
-        ignore_argument_name: ['^first$', '^last$', '^after$', '^before$']
+        ignore_argument: ['^first$', '^last$', '^after$', '^before$']
         report_format: "argument %s of %s has no constraint directive"
+
 ```
 
 - sample2: permission directive exists on the type
@@ -52,10 +55,18 @@ analyzer:
     type:
       - description: "permission directive exists on the type"
         directive: permission
-        kind: ['OBJECT', 'INTERFACE', 'FIELD_DEFINITION']
-        object_patterns: ['.*']
-        ignore_type: [ '^Query$', '^Mutation$', '^Subscription$', 'PageInfo$', 'Connection$', 'Payload$']
+        kind: ['OBJECT', 'INTERFACE']
+        type: ['.+']
+        ignore_type: [ '^Query$', '^Mutation$', '^Subscription$', '^PageInfo$']
         report_format: "%s has no permission directive"
+    field:
+      - description: "permission directive exists on the mutation"
+        directive: permission
+        kind: ['OBJECT']
+        field_parent_type:  ['^Mutation$']
+        field_type: ['.+']
+        ignore_field:
+        report_format: "%s.%s has no permission directive"
 ```
 
 The `directive` command has a flag, `schema` which will be parsed and analyzed by directive's Analyzer.

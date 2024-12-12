@@ -2,15 +2,18 @@
 analyzer:
   - analyzer_name: "constraint directive"
     description: "constraint directive exists on the field"
-    input_object_field:
+    field:
       - description: "constraint directive exists on the input field"
         directive: constraint
+        kind: ['INPUT_OBJECT']
+        field_parent_type: ['.+']
         field_type: ['^\[?Int\]?$', '^\[?Float\]?$', '^\[?String\]?$', '^\[?Decimal\]?$', '^\[?URL\]?$']
-        ignore_field_name: ['^first$', '^last$', '^after$', '^before$']
+        ignore_field: ['^first$', '^last$', '^after$', '^before$']
         report_format: "%s.%s has no constraint directive"
-    object_field_argument:
+    argument:
       - description: "constraint directive exists on the object field argument"
         directive: constraint
+        kind: ['OBJECT']
         argument_type: ['^\[?Int\]?$', '^\[?Float\]?$', '^\[?String\]?$', '^\[?Decimal\]?$', '^\[?URL\]?$']
-        ignore_argument_name: ['^first$', '^last$', '^after$', '^before$']
+        ignore_argument: ['^first$', '^last$', '^after$', '^before$']
         report_format: "argument %s of %s has no constraint directive"

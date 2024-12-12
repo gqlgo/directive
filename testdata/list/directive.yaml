@@ -2,13 +2,16 @@
 analyzer:
   - analyzer_name: "list directive"
     description: "list directive exists on the array field"
-    input_object_field:
+    field:
       - description: "list directive exists on the input array field"
         directive: list
+        field_parent_type: ['.+']
+        kind: [INPUT_OBJECT]
         field_type: ['\[.+\]']
         report_format: "%s.%s has no list directive"
-    object_field_argument:
+    argument:
       - description: "list directive exists on the object field array argument"
         directive: list
+        kind: ['OBJECT']
         argument_type: ['\[.+\]']
         report_format: "argument %s of %s has no list directive"

@@ -5,7 +5,15 @@ analyzer:
     type:
       - description: "permission directive exists on the type"
         directive: permission
-        kind: ['OBJECT', 'INTERFACE', 'FIELD_DEFINITION']
-        object_patterns: ['.*']
-        ignore_type: [ '^Query$', '^Mutation$', '^Subscription$', 'PageInfo$', 'Connection$', 'Payload$']
+        kind: ['OBJECT', 'INTERFACE']
+        type: ['.+']
+        ignore_type: [ '^Query$', '^Mutation$', '^Subscription$', '^PageInfo$']
         report_format: "%s has no permission directive"
+    field:
+      - description: "permission directive exists on the mutation"
+        directive: permission
+        kind: ['OBJECT']
+        field_parent_type:  ['^Mutation$']
+        field_type: ['.+']
+        ignore_field:
+        report_format: "%s.%s has no permission directive"

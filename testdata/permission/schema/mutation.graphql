@@ -1,6 +1,6 @@
 type Mutation {
     create(input: CreateInput!): CreatePayload! @permission(permissions: ["user:write"])
-    createWithoutPermission(input: CreateWithoutPermissionInput!): CreateWithoutPermissionPayload!
+    createWithoutPermission(input: CreateWithoutPermissionInput!): CreateWithoutPermissionPayload! # want "Mutation.createWithoutPermission has no permission directive"
 }
 
 input CreateInput {
@@ -8,7 +8,7 @@ input CreateInput {
     names: [String!]!
 }
 
-type CreatePayload {
+type CreatePayload @permission(permissions: ["user:write"]) {
     a: [String!]!
 }
 
@@ -17,6 +17,6 @@ input CreateWithoutPermissionInput {
     names: [String!]!
 }
 
-type CreateWithoutPermissionPayload {
+type CreateWithoutPermissionPayload { # want "CreateWithoutPermissionPayload has no permission directive"
     b: [String!]!
 }

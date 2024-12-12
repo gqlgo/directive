@@ -27,22 +27,25 @@ func TestParseConfigFile(t *testing.T) {
 					{
 						AnalyzerName: "constraint directive",
 						Description:  "constraint directive exists on the field",
-						InputObjectFieldConfig: []*InputObjectFieldConfig{
+						FieldConfig: []*FieldConfig{
 							{
 								Description:             "constraint directive exists on the input field",
 								Directive:               "constraint",
+								Kinds:                   []ast.DefinitionKind{ast.InputObject},
+								FieldParentTypePatterns: []string{`.+`},
 								FieldTypePatterns:       []string{`^\[?Int\]?$`, `^\[?Float\]?$`, `^\[?String\]?$`, `^\[?Decimal\]?$`, `^\[?URL\]?$`},
-								IgnoreFieldNamePatterns: []string{`^first$`, `^last$`, `^after$`, `^before$`},
+								IgnoreFieldPatterns:     []string{`^first$`, `^last$`, `^after$`, `^before$`},
 								ReportFormat:            "%s.%s has no constraint directive",
 							},
 						},
-						ObjectFieldArgumentConfig: []*ObjectFieldArgumentConfig{
+						ArgumentConfig: []*ArgumentConfig{
 							{
-								Description:                "constraint directive exists on the object field argument",
-								Directive:                  "constraint",
-								ArgumentTypePatterns:       []string{`^\[?Int\]?$`, `^\[?Float\]?$`, `^\[?String\]?$`, `^\[?Decimal\]?$`, `^\[?URL\]?$`},
-								IgnoreArgumentNamePatterns: []string{`^first$`, `^last$`, `^after$`, `^before$`},
-								ReportFormat:               "argument %s of %s has no constraint directive",
+								Description:            "constraint directive exists on the object field argument",
+								Directive:              "constraint",
+								Kinds:                  []ast.DefinitionKind{ast.Object},
+								ArgumentTypePatterns:   []string{`^\[?Int\]?$`, `^\[?Float\]?$`, `^\[?String\]?$`, `^\[?Decimal\]?$`, `^\[?URL\]?$`},
+								IgnoreArgumentPatterns: []string{`^first$`, `^last$`, `^after$`, `^before$`},
+								ReportFormat:           "argument %s of %s has no constraint directive",
 							},
 						},
 					},
@@ -60,18 +63,21 @@ func TestParseConfigFile(t *testing.T) {
 					{
 						AnalyzerName: "id directive",
 						Description:  "id directive exists on the field",
-						InputObjectFieldConfig: []*InputObjectFieldConfig{
+						FieldConfig: []*FieldConfig{
 							{
-								Description:       "id directive exists on the input field",
-								Directive:         "id",
-								FieldTypePatterns: []string{`^\[?ID\]?$`},
-								ReportFormat:      "%s.%s has no id directive",
+								Description:             "id directive exists on the input field",
+								Directive:               "id",
+								Kinds:                   []ast.DefinitionKind{ast.InputObject},
+								FieldParentTypePatterns: []string{`.+`},
+								FieldTypePatterns:       []string{`^\[?ID\]?$`},
+								ReportFormat:            "%s.%s has no id directive",
 							},
 						},
-						ObjectFieldArgumentConfig: []*ObjectFieldArgumentConfig{
+						ArgumentConfig: []*ArgumentConfig{
 							{
 								Description:          "id directive exists on the object field argument",
 								Directive:            "id",
+								Kinds:                []ast.DefinitionKind{ast.Object},
 								ArgumentTypePatterns: []string{`^\[?ID\]?$`},
 								ReportFormat:         "argument %s of %s has no id directive",
 							},
@@ -91,18 +97,21 @@ func TestParseConfigFile(t *testing.T) {
 					{
 						AnalyzerName: "list directive",
 						Description:  "list directive exists on the array field",
-						InputObjectFieldConfig: []*InputObjectFieldConfig{
+						FieldConfig: []*FieldConfig{
 							{
-								Description:       "list directive exists on the input array field",
-								Directive:         "list",
-								FieldTypePatterns: []string{`\[.+\]`},
-								ReportFormat:      "%s.%s has no list directive",
+								Description:             "list directive exists on the input array field",
+								Directive:               "list",
+								Kinds:                   []ast.DefinitionKind{ast.InputObject},
+								FieldParentTypePatterns: []string{`.+`},
+								FieldTypePatterns:       []string{`\[.+\]`},
+								ReportFormat:            "%s.%s has no list directive",
 							},
 						},
-						ObjectFieldArgumentConfig: []*ObjectFieldArgumentConfig{
+						ArgumentConfig: []*ArgumentConfig{
 							{
 								Description:          "list directive exists on the object field array argument",
 								Directive:            "list",
+								Kinds:                []ast.DefinitionKind{ast.Object},
 								ArgumentTypePatterns: []string{`\[.+\]`},
 								ReportFormat:         "argument %s of %s has no list directive",
 							},
@@ -126,10 +135,20 @@ func TestParseConfigFile(t *testing.T) {
 							{
 								Description:        "permission directive exists on the type",
 								Directive:          "permission",
-								Kinds:              []ast.DefinitionKind{"OBJECT", "INTERFACE", "FIELD_DEFINITION"},
-								ObjectPatterns:     []string{".*"},
-								IgnoreTypePatterns: []string{"^Query$", "^Mutation$", "^Subscription$", "PageInfo$", "Connection$", "Payload$"},
+								Kinds:              []ast.DefinitionKind{ast.Object, ast.Interface},
+								TypePatterns:       []string{".+"},
+								IgnoreTypePatterns: []string{"^Query$", "^Mutation$", "^Subscription$", "^PageInfo$"},
 								ReportFormat:       "%s has no permission directive",
+							},
+						},
+						FieldConfig: []*FieldConfig{
+							{
+								Description:             "permission directive exists on the mutation",
+								Directive:               "permission",
+								Kinds:                   []ast.DefinitionKind{ast.Object},
+								FieldParentTypePatterns: []string{`^Mutation$`},
+								FieldTypePatterns:       []string{".+"},
+								ReportFormat:            "%s.%s has no permission directive",
 							},
 						},
 					},
