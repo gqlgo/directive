@@ -64,7 +64,7 @@ func TestParseConfigFile(t *testing.T) {
 							{
 								Description:       "id directive exists on the input field",
 								Directive:         "id",
-								FieldTypePatterns: []string{"ID"},
+								FieldTypePatterns: []string{`^\[?ID\]?$`},
 								ReportFormat:      "%s.%s has no id directive",
 							},
 						},
@@ -72,7 +72,7 @@ func TestParseConfigFile(t *testing.T) {
 							{
 								Description:          "id directive exists on the object field argument",
 								Directive:            "id",
-								ArgumentTypePatterns: []string{"ID"},
+								ArgumentTypePatterns: []string{`^\[?ID\]?$`},
 								ReportFormat:         "argument %s of %s has no id directive",
 							},
 						},
@@ -128,7 +128,7 @@ func TestParseConfigFile(t *testing.T) {
 								Directive:          "permission",
 								Kinds:              []ast.DefinitionKind{"OBJECT", "INTERFACE", "FIELD_DEFINITION"},
 								ObjectPatterns:     []string{".*"},
-								IgnoreTypePatterns: []string{"Query", "Mutation", "Subscription", "PageInfo", "Connection", "Payload"},
+								IgnoreTypePatterns: []string{"^Query$", "^Mutation$", "^Subscription$", "PageInfo$", "Connection$", "Payload$"},
 								ReportFormat:       "%s has no permission directive",
 							},
 						},

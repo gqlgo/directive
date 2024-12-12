@@ -7,5 +7,5 @@ analyzer:
         directive: permission
         kind: ['OBJECT', 'INTERFACE', 'FIELD_DEFINITION']
         object_patterns: ['.*']
-        ignore_type: [ 'Query', 'Mutation', 'Subscription', 'PageInfo', 'Connection', 'Payload']
+        ignore_type: [ '^Query$', '^Mutation$', '^Subscription$', 'PageInfo$', 'Connection$', 'Payload$']
         report_format: "%s has no permission directive"
