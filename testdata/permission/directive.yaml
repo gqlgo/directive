@@ -1,13 +1,13 @@
 ---
 analyzer:
   - analyzer_name: "permission directive"
-    description: "permission directive exists on the type"
-    type:
-      - description: "permission directive exists on the type"
+    description: "permission directive exists on the definition"
+    definition:
+      - description: "permission directive exists on the definition"
         directive: permission
         kind: ['OBJECT', 'INTERFACE']
-        type: ['.+']
-        ignore_type: [ '^Query$', '^Mutation$', '^Subscription$', '^PageInfo$']
+        definition: ['.+']
+        exclude_definition: [ '^Query$', '^Mutation$', '^Subscription$', '^PageInfo$']
         report_format: "%s has no permission directive"
     field:
       - description: "permission directive exists on the mutation"
@@ -15,5 +15,5 @@ analyzer:
         kind: ['OBJECT']
         field_parent_type:  ['^Mutation$']
         field_type: ['.+']
-        ignore_field:
-        report_format: "%s.%s has no permission directive"
+        exclude_field:
+        report_format: "%s has no permission directive"

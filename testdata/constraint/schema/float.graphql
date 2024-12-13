@@ -1,9 +1,9 @@
 type FloatType {
     f: Float!
     floatWithConstraintDirective(arg: Float! @constraint): Float!
-    floatWithNoConstraintDirective(arg: Float!): Float!  # want "argument arg of floatWithNoConstraintDirective has no constraint directive"
+    floatWithNoConstraintDirective(arg: Float!): Float!  # want "argument arg has no constraint directive"
     floatWithDirective(args: [Float!]! @constraint): Float!
-    floatWithNoDirective(args: [Float!]!): Float!  # want "argument args of floatWithNoDirective has no constraint directive"
+    floatWithNoDirective(args: [Float!]!): Float!  # want "argument args has no constraint directive"
 }
 
 extend type Mutation {

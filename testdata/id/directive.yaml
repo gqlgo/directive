@@ -8,10 +8,10 @@ analyzer:
         kind: ['INPUT_OBJECT']
         field_parent_type: ['.+']
         field_type: ['^\[?ID\]?$']
-        report_format: "%s.%s has no id directive"
+        report_format: "%s has no id directive"
     argument:
       - description: "id directive exists on the object field argument"
         directive: id
         kind: ['OBJECT']
         argument_type: ['^\[?ID\]?$']
-        report_format: "argument %s of %s has no id directive"
+        report_format: "argument %s has no id directive"

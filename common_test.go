@@ -105,7 +105,7 @@ func Test_isNameMatch(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isNameMatch(tt.args.pattern, tt.args.typeName); got != tt.want {
+			if got := isMatch(tt.args.pattern, tt.args.typeName); got != tt.want {
 				t.Errorf("isTypeNameMatch() = %v, want %v", got, tt.want)
 			}
 		})

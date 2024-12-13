@@ -32,32 +32,32 @@ analyzer:
       - description: "constraint directive exists on the input field"
         directive: constraint
         kind: ['INPUT_OBJECT']
+        field_parent_type: ['.+']
         field_type: ['^\[?Int\]?$', '^\[?Float\]?$', '^\[?String\]?$', '^\[?Decimal\]?$', '^\[?URL\]?$']
-        ignore_field: ['^first$', '^last$', '^after$', '^before$']
-        report_format: "%s.%s has no constraint directive"
+        exclude_field: ['^first$', '^last$', '^after$', '^before$']
+        report_format: "%s has no constraint directive"
     argument:
       - description: "constraint directive exists on the object field argument"
         directive: constraint
         kind: ['OBJECT']
         argument_type: ['^\[?Int\]?$', '^\[?Float\]?$', '^\[?String\]?$', '^\[?Decimal\]?$', '^\[?URL\]?$']
-        ignore_argument: ['^first$', '^last$', '^after$', '^before$']
-        report_format: "argument %s of %s has no constraint directive"
-
+        exclude_argument: ['^first$', '^last$', '^after$', '^before$']
+        report_format: "argument %s has no constraint directive"
 ```
 
-- sample2: permission directive exists on the type
+- sample2: permission directive exists on the definition
 
 ```yaml
 ---
 analyzer:
   - analyzer_name: "permission directive"
-    description: "permission directive exists on the type"
-    type:
-      - description: "permission directive exists on the type"
+    description: "permission directive exists on the definition"
+    definition:
+      - description: "permission directive exists on the definition"
         directive: permission
         kind: ['OBJECT', 'INTERFACE']
-        type: ['.+']
-        ignore_type: [ '^Query$', '^Mutation$', '^Subscription$', '^PageInfo$']
+        definition: ['.+']
+        exclude_definition: [ '^Query$', '^Mutation$', '^Subscription$', '^PageInfo$']
         report_format: "%s has no permission directive"
     field:
       - description: "permission directive exists on the mutation"
@@ -65,8 +65,9 @@ analyzer:
         kind: ['OBJECT']
         field_parent_type:  ['^Mutation$']
         field_type: ['.+']
-        ignore_field:
-        report_format: "%s.%s has no permission directive"
+        exclude_field:
+        report_format: "%s has no permission directive"
+
 ```
 
 The `directive` command has a flag, `schema` which will be parsed and analyzed by directive's Analyzer.

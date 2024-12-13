@@ -8,10 +8,10 @@ analyzer:
         field_parent_type: ['.+']
         kind: [INPUT_OBJECT]
         field_type: ['\[.+\]']
-        report_format: "%s.%s has no list directive"
+        report_format: "%s has no list directive"
     argument:
       - description: "list directive exists on the object field array argument"
         directive: list
         kind: ['OBJECT']
         argument_type: ['\[.+\]']
-        report_format: "argument %s of %s has no list directive"
+        report_format: "argument %s has no list directive"

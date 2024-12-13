@@ -12,11 +12,20 @@ type Config struct {
 }
 
 type AnalyzerConfig struct {
-	AnalyzerName   string            `yaml:"analyzer_name"`
-	Description    string            `yaml:"description"`
-	FieldConfig    []*FieldConfig    `yaml:"field"`
-	ArgumentConfig []*ArgumentConfig `yaml:"argument"`
-	TypeConfig     []*TypeConfig     `yaml:"type"`
+	AnalyzerName     string              `yaml:"analyzer_name"`
+	Description      string              `yaml:"description"`
+	DefinitionConfig []*DefinitionConfig `yaml:"definition"`
+	FieldConfig      []*FieldConfig      `yaml:"field"`
+	ArgumentConfig   []*ArgumentConfig   `yaml:"argument"`
+}
+
+type DefinitionConfig struct {
+	Description               string               `yaml:"description"`
+	Directive                 string               `yaml:"directive"`
+	Kinds                     []ast.DefinitionKind `yaml:"kind"`
+	DefinitionPatterns        []string             `yaml:"definition"`
+	ExcludeDefinitionPatterns []string             `yaml:"exclude_definition"`
+	ReportFormat              string               `yaml:"report_format"`
 }
 
 type FieldConfig struct {
@@ -25,26 +34,17 @@ type FieldConfig struct {
 	Kinds                   []ast.DefinitionKind `yaml:"kind"`
 	FieldParentTypePatterns []string             `yaml:"field_parent_type"`
 	FieldTypePatterns       []string             `yaml:"field_type"`
-	IgnoreFieldPatterns     []string             `yaml:"ignore_field"`
+	ExcludeFieldPatterns    []string             `yaml:"exclude_field"`
 	ReportFormat            string               `yaml:"report_format"`
 }
 
 type ArgumentConfig struct {
-	Description            string               `yaml:"description"`
-	Directive              string               `yaml:"directive"`
-	Kinds                  []ast.DefinitionKind `yaml:"kind"`
-	ArgumentTypePatterns   []string             `yaml:"argument_type"`
-	IgnoreArgumentPatterns []string             `yaml:"ignore_argument"`
-	ReportFormat           string               `yaml:"report_format"`
-}
-
-type TypeConfig struct {
-	Description        string               `yaml:"description"`
-	Directive          string               `yaml:"directive"`
-	Kinds              []ast.DefinitionKind `yaml:"kind"`
-	TypePatterns       []string             `yaml:"type"`
-	IgnoreTypePatterns []string             `yaml:"ignore_type"`
-	ReportFormat       string               `yaml:"report_format"`
+	Description             string               `yaml:"description"`
+	Directive               string               `yaml:"directive"`
+	Kinds                   []ast.DefinitionKind `yaml:"kind"`
+	ArgumentTypePatterns    []string             `yaml:"argument_type"`
+	ExcludeArgumentPatterns []string             `yaml:"exclude_argument"`
+	ReportFormat            string               `yaml:"report_format"`
 }
 
 func ParseConfigFile(configFile io.Reader) (*Config, error) {

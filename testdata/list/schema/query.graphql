@@ -2,7 +2,7 @@ type Query {
     a: A!
     b: B!
     aList(ids: [ID!]! @list(max: 64)): [A!]!
-    bList(ids: [ID!]!): [B!]! # want "argument ids of bList has no list directive"
+    bList(ids: [ID!]!): [B!]! # want "argument ids has no list directive"
     aNameList(names: [String!]! @list(max: 64)): [A!]!
-    bNameList(names: [String!]!): [B!]! # want "argument names of bNameList has no list directive"
+    bNameList(names: [String!]!): [B!]! # want "argument names has no list directive"
 }

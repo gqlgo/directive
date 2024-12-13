@@ -1,9 +1,9 @@
 type StringType {
     s: String!
     stringWithConstraintDirective(arg: String! @constraint, first: String!): String!
-    stringWithNoConstraintDirective(arg: String!): String!  # want "argument arg of stringWithNoConstraintDirective has no constraint directive"
+    stringWithNoConstraintDirective(arg: String!): String!  # want "argument arg has no constraint directive"
     stringWithDirective(args: [String!]! @constraint): String!
-    stringWithNoDirective(args: [String!]!): String!  # want "argument args of stringWithNoDirective has no constraint directive"
+    stringWithNoDirective(args: [String!]!): String!  # want "argument args has no constraint directive"
 }
 
 type Mutation {

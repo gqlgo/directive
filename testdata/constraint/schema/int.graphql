@@ -1,9 +1,9 @@
 type IntType {
     i: Int!
     intWithConstraintDirective(arg: Int! @constraint): Int!
-    intWithNoConstraintDirective(arg: Int!): Int!  # want "argument arg of intWithNoConstraintDirective has no constraint directive"
+    intWithNoConstraintDirective(arg: Int!): Int!  # want "argument arg has no constraint directive"
     intWithDirective(args: [Int!]! @constraint): Int!
-    intWithNoDirective(args: [Int!]!): Int!  # want "argument args of intWithNoDirective has no constraint directive"
+    intWithNoDirective(args: [Int!]!): Int!  # want "argument args has no constraint directive"
 }
 
 extend type Mutation {

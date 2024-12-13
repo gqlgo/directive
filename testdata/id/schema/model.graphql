@@ -2,9 +2,9 @@ type Type {
     id: ID! # OK
     field: String!
     fieldWithIdDirective(id: ID! @id(kind: "Kind")): FieldWithIdDirective
-    fieldWithNoIdDirective(id: ID!): FieldWithNoIdDirective # want "argument id of fieldWithNoIdDirective has no id directive"
+    fieldWithNoIdDirective(id: ID!): FieldWithNoIdDirective # want "argument id has no id directive"
     fieldWithIdsDirective(ids: [ID!]! @id(kind: "Kind")): [FieldWithNoIdDirective!]!
-    fieldWithNoIdsDirective(ids: [ID!]!): [FieldWithNoIdDirective!]! # want "argument ids of fieldWithNoIdsDirective has no id directive"
+    fieldWithNoIdsDirective(ids: [ID!]!): [FieldWithNoIdDirective!]! # want "argument ids has no id directive"
 }
 
 type FieldWithIdDirective {
