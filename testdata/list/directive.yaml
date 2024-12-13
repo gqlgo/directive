@@ -6,7 +6,7 @@ analyzer:
       - description: "list directive exists on the input array field"
         directive: list
         field_parent_type: ['.+']
-        kind: [INPUT_OBJECT]
+        kind: ['INPUT_OBJECT']
         field_type: ['\[.+\]']
         report_format: "%s has no list directive"
     argument:
